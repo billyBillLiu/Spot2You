@@ -7,24 +7,29 @@ import noImage from '../assets/noimage.png';
 const PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 
 const GetPlaylist = () => {
-    const [token, setToken] = useState('');
+    const [spotifyToken, setSpotifyToken] = useState('');
     const [playlists, setPlaylists] = useState([]);
-
-    useEffect(() => {
-        if (localStorage.getItem('access_token')){
-            setToken(localStorage.getItem('access_token'));
-        }
-    }, [])
 
     const handleGetPLaylists = () => {
         axios.get(PLAYLIST_ENDPOINT, {
             headers: {
-                Authorization: "Bearer " + token, 
+                Authorization: "Bearer " + spotifyToken, 
             },
         })
-        .then(response => {setPlaylists(response.data.items)})
-        .catch((error) => { console.log(error); })
+        .then(response => {
+            setPlaylists(response.data.items)
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/api/get")
+        .then((response) => {
+          setSpotifyToken(response.data[0]?.spotify_token);
+        });
+    }, [])
 
     return (
     <>
@@ -36,7 +41,7 @@ const GetPlaylist = () => {
                 <p>{playlist.name}</p>
             </div>
         )
-        }) : 'nu'}
+        }) : 'NOTHING'}
     </>
     )
     

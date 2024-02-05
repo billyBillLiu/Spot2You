@@ -1,31 +1,41 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import AuthorizationButton from './components/AuthButton';
+import axios from 'axios';
+import SpotifyAuth from './components/SpotifyAuth';
+import YouTubeAuth from './components/YouTubeAuth';
 import GetPlaylist from './components/GetPlaylists';
 
 const App = () => {  
-  const [token, setToken] = useState('');
+  const [spotifyToken, setSpotifyToken] = useState('');
+  const [youTubeToken, setYouTubeToken] = useState('');
+
   useEffect(() => {
-    const hash = window.location.hash;
-    let accessToken = localStorage.getItem('access_token');
-
-    if (hash) {
-      accessToken = hash.substring(1).split('&').find(string => string.startsWith('access_token')).split('=')[1];
-      window.location.hash = '';
-      localStorage.setItem('access_token', accessToken);
-    }
-
-    setToken(accessToken);
+    axios.get("http://localhost:3001/api/get")
+      .then((response) => {
+        setSpotifyToken(response.data[0].spotify_token);
+    })
+      .catch((error) => {
+        setSpotifyToken('');
+      })
+    axios.get("http://localhost:3001/api/get")
+      .then((response) => {
+        setYouTubeToken(response.data[0].youtube_token);
+    })
+      .catch((error) => {
+        setYouTubeToken('');
+      })
   }, [])
 
   return (
       <div className='test'>
         <div>
-          <AuthorizationButton />
+          <SpotifyAuth />
+          <YouTubeAuth />
           <GetPlaylist />
         </div>
         <div>
-          <p className='token'>TOKEN: {token}</p>
+          <p className='token'>SPOTIFY TOKEN: {spotifyToken}</p>
+          <p className='token'>YOUTUBE TOKEN: {youTubeToken}</p>
         </div>
       </div>
   );
