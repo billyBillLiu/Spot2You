@@ -3,29 +3,48 @@ import './App.css';
 import axios from 'axios';
 import SpotifyAuth from './components/SpotifyAuth';
 import GetPlaylist from './components/GetPlaylists';
+import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
 
 const App = () => {  
-  const [spotifyToken, setSpotifyToken] = useState('');
+  const [currentUser, setCurrentUser] = useState(-1);
+  const [regForm, setRegForm] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/get")
-      .then((response) => {
-        setSpotifyToken(response.data[0].spotify_token);
-    })
-      .catch((error) => {
-        setSpotifyToken('');
-      })
-  }, [])
+    if (currentUser == -1) {
+      setLoginStatus(false);
+    } else {
+      setLoginStatus(true);
+    }
+  });
+
+  const toggleForm = () => {
+    if (regForm) {
+      setRegForm(false);
+    } else {
+      setRegForm(true);
+    }
+  }
+  
+  const login = () => {
+    setLoginStatus(true);
+  }
+
+  const logout = () => {
+    setLoginStatus(false);
+  }
 
   return (
-      <div className='test'>
-        <div>
-          <SpotifyAuth />
-          <GetPlaylist />
-        </div>
-        <div>
-          <p className='token'>SPOTIFY TOKEN: {spotifyToken}</p>
-        </div>
+      <div>
+        {loginStatus ? (
+        <Home setCurrentUser={setCurrentUser} currentUser={currentUser}/>
+        ) : (
+          regForm ? 
+          <Register onToggleForm={toggleForm}/> 
+          : 
+          <Login onToggleForm={toggleForm} setCurrentUser={setCurrentUser}/>)}
       </div>
   );
 };

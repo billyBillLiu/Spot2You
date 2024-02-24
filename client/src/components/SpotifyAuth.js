@@ -7,12 +7,12 @@ const REDIRECT_URI = 'http://localhost:3000';
 const SCOPES = ['playlist-read-private', 'playlist-read-collaborative', 'playlist-modify-private', 'playlist-modify-public'];
 const SCOPES_URL = SCOPES.join('%20');
 
-const SpotifyAuth = () => {
+const SpotifyAuth = ({setAccessToken}) => {
 
-  const addSpotifyToken = (spotify_token) => {
-    axios.post("http://localhost:3001/api/insertSpotifyToken", {
-      spotify_token: spotify_token
-    })
+  const getToken = async () => {
+    let access_token = await authorize();
+    setAccessToken(access_token);
+    window.location.href = 'http://localhost:3000/';
   };
 
   const authorize = () => {
@@ -23,15 +23,14 @@ const SpotifyAuth = () => {
                       + '&scope=' + SCOPES_URL 
                       + '&show_dialog=true';
     const hash = window.location.hash;
-    let spotify_token = hash.substring(1)
-                        .split('&')
-                        .find(string => string.startsWith('access_token'))
-                        .split('=')[1];
-    addSpotifyToken(spotify_token);
+    return hash.substring(1)
+            .split('&')
+            .find(string => string.startsWith('access_token'))
+            .split('=')[1];
   };
 
   return (
-    <button onClick={authorize}>
+    <button onClick={getToken}>
       LOGIN SPOTIFY
     </button>
   );

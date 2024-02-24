@@ -16,39 +16,49 @@ const db = mysql.createPool({
     database: 'spot2youdb'
 });
 
-app.get("/api/delete", (req, res) => {
-    const sqlDelete = "DELETE FROM token_info";
-    db.query(sqlDelete, (err, result) => {
+
+app.post("/api/getUser", (req, res) => {
+    const user_id = req.body.user_id;
+    const sqlSelect = "SELECT * FROM spotify_info WHERE user_id = ?";
+    db.query(sqlSelect,[user_id] ,(err, result) => {
+        if (err) {
+            res.send({err: err});
+        }
         res.send(result);
-        console.log(result);
     })
 })
 
-app.get("/api/get", (req, res) => {
-    const sqlSelect = "SELECT * FROM token_info";
-    db.query(sqlSelect, (err, result) => {
-        console.log("GETTING:")
-        res.send(result);
-        console.log(result);
-    })
-})
-
-app.post("/api/insertSpotifyToken", (req, res)=> {
-    const spotify_token = req.body.spotify_token;
-    const sqlInsert = "INSERT INTO token_info (spotify_token) VALUES (?)";
-    db.query(sqlInsert, [spotify_token], (err, result)=> {
-        console.log(result);
+app.post("/api/register", (req, res)=> {
+    const username = req.body.username;
+    const password = req.body.password;
+    const sqlInsert = "INSERT INTO spotify_info (username, password) VALUES (?, ?)";
+    db.query(sqlInsert, [username, password], (err, result)=> {
+        console.log(err);
     });
 });
 
-app.post("/api/insertYouTubeToken", (req, res)=> {
-    const youtube_token = req.body.youtube_token;
-    const id = req.body.id;
-    const sqlUpdate = "UPDATE token_info SET youtube_token = ? WHERE id = ?";
-    db.query(sqlUpdate, [youtube_token, id], (err, result)=> {
-        console.log("YOUTUBE INSERT:")
-        console.log(result);
-        console.log(err);
+app.post('/api/login', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const sqlSelect = 'SELECT * FROM spotify_info WHERE username = ? AND password = ?';
+    db.query(sqlSelect, [username, password], (err, result) => {
+        if(err) {
+            res.send({err: err});
+        }
+        res.send(result);
+    });
+});
+
+app.post("/api/updateToken", (req, res)=> {
+    const user_id = req.body.user_id;
+    const access_token = req.body.access_token;
+    const sqlUpdate = "UPDATE spotify_info SET access_token = ? WHERE user_id = ?";
+    db.query(sqlUpdate, [access_token, user_id], (err, result)=> {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+        }
     });
 });
 
