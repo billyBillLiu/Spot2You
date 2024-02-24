@@ -7,13 +7,13 @@ import noImage from '../assets/noimage.png';
 const PLAYLIST_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 
 const GetPlaylist = () => {
-    const [spotifyToken, setSpotifyToken] = useState('');
+    const [accessToken, setAccessToken] = useState('');
     const [playlists, setPlaylists] = useState([]);
 
     const handleGetPLaylists = () => {
         axios.get(PLAYLIST_ENDPOINT, {
             headers: {
-                Authorization: "Bearer " + spotifyToken, 
+                Authorization: "Bearer " + accessToken, 
             },
         })
         .then(response => {
@@ -27,7 +27,7 @@ const GetPlaylist = () => {
     useEffect(() => {
         axios.get("http://localhost:3001/api/get")
         .then((response) => {
-          setSpotifyToken(response.data[0]?.spotify_token);
+          setAccessToken(response.data[0]?.access_token);
         });
     }, [])
 
