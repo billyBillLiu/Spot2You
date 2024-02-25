@@ -5,13 +5,13 @@
 .playlists {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 
 
 .playlist-img {
   width: 50px;
   height: 50px;
+  margin-right: 10px
 }
 
 body {
@@ -19,7 +19,7 @@ body {
   color: #fff; /* White text color */
 }
 
-a {
+.signup {
   font-weight: bold; /* Make links bold */
   color: cyan;
 }
