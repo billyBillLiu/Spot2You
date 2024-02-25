@@ -24,7 +24,7 @@ const GetPlaylist = ({accessToken, setPlaylists}) => {
 
     return (
         <div>
-            <button onClick={handleGetPLaylists}>Get Playlists</button>
+            <button onClick={handleGetPLaylists}>Refresh Playlists</button>
         </div>
     )
 }
