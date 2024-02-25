@@ -39,7 +39,7 @@ const Login =  ({onToggleForm, setCurrentUser}) => {
             <button type="submit">Login</button>
         </form>
         <p>
-          Don't have an account? <a onClick={onToggleForm}>Register</a>
+          Don't have an account? <a className='signup' onClick={onToggleForm}>Register</a>
         </p>
       </div>
     )

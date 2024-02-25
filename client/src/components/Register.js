@@ -44,7 +44,7 @@ const Login = ({onToggleForm}) => {
             <button type="submit">Register</button>
         </form>
         <p>
-          Have an account? <a onClick={onToggleForm}>Log in</a>
+          Have an account? <a className='signup' onClick={onToggleForm}>Log in</a>
         </p>
       </div>
     )
